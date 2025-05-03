@@ -110,9 +110,10 @@ def main():
             z = [l1 + l2 for l1, l2 in zip(x, y)]                   # adds the coordinates
             result = [l1 / l2 for l1, l2 in zip(z, division)]       # divides the coordinates by 2
             facelist[i].append(result[2])                           # adds the faces z value to the facelist
-            
+            facelist[i].append(result[1])        
+
         #print(*facelist)
-        facelist_z = sorted(facelist, key=lambda v: (v[4]))         # sorts the facelist by the z value
+        facelist_z = sorted(facelist, key=lambda v: (v[4], -v[5]))         # sorts the facelist by the z value
 
         return(facelist_z)
     
