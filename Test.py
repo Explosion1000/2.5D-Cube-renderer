@@ -2,6 +2,8 @@ import sys, pygame
 from pygame.locals import*
 import numpy as np
 from decimal import Decimal
+import time
+import math
 
 #TODO:
 # Clean this mess up
@@ -109,11 +111,22 @@ def main():
             division = [2, 2, 2]
             z = [l1 + l2 for l1, l2 in zip(x, y)]                   # adds the coordinates
             result = [l1 / l2 for l1, l2 in zip(z, division)]       # divides the coordinates by 2
-            facelist[i].append(result[2])                           # adds the faces z value to the facelist
-            facelist[i].append(result[1])        
+            #print(result)
+            facelist[i].append(result[2])     #z(4)                      # adds the faces z value to the facelist
+            facelist[i].append(result[1])     #y(5)
+            facelist[i].append(result[0])     #x(6)   
+        camera = list(((max(point[6] for point in facelist)) + 9999, (max(point[5] for point in facelist)) - 9999, (max(point[4] for point in facelist)) + 9999))
+        print(camera)
+        for i in range(len(facelist)):
+            dist = math.sqrt(((camera[0] - (facelist[i][6] - 1)) ** 2) +
+                             ((camera[1] - (facelist[i][5] - 1)) ** 2) + 
+                             ((camera[2] - (facelist[i][4] - 1)) ** 2))
+            facelist[i].append(dist)
+            
 
         #print(*facelist)
-        facelist_z = sorted(facelist, key=lambda v: (v[4], -v[5]))         # sorts the facelist by the z value
+        facelist_z = sorted(facelist, key=lambda v: (-v[7]))         # sorts the facelist by the z value
+        
 
         return(facelist_z)
     
@@ -137,7 +150,7 @@ def main():
     
     facelist_z = getZValue()
         
-    getZValue()
+    #getZValue()
 
     def drawMesh(zoomlevel = 1):
         #Draws stuff
@@ -159,7 +172,8 @@ def main():
                                                     ((drawlist[((facelist_z[i][2])-1)][0] * zoomlevel), (drawlist[((facelist_z[i][2])-1)][1] * zoomlevel)), 
                                                     ((drawlist[((facelist_z[i][3])-1)][0] * zoomlevel), (drawlist[((facelist_z[i][3])-1)][1] * zoomlevel))), 1)
         
-        pygame.display.flip()
+            pygame.display.flip()
+            #time.sleep(0.5)
         
     drawMesh()
 
